@@ -1,0 +1,5 @@
+project: rnshah9/cvechecker
+target: cvechecker
+
+cmds:
+  - cmd: /repo/src/cvechecker -b @@
