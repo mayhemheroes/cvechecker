@@ -1,4 +1,4 @@
-project: rnshah9/cvechecker
+project: cvechecker
 target: cvechecker
 
 cmds:
