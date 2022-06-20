@@ -20,4 +20,5 @@ FROM ubuntu:22.04 as package
 
 COPY --from=builder /deps /deps
 COPY --from=builder /repo/src/cvechecker /repo/src/cvechecker
+COPY --from=builder /usr/local/etc /usr/local/etc
 ENV LD_LIBRARY_PATH=/deps
