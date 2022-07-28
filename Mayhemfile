@@ -1,0 +1,5 @@
+project: cvechecker
+target: cvechecker
+
+cmds:
+  - cmd: /install/bin/cvechecker -b @@
