@@ -2,4 +2,4 @@ project: cvechecker
 target: cvechecker
 
 cmds:
-  - cmd: /repo/src/cvechecker -b @@
+  - cmd: /install/bin/cvechecker -b @@

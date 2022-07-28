@@ -1,25 +1,18 @@
 FROM --platform=linux/amd64 ubuntu:22.04 as builder
 
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential automake pkg-config libtool sqlite3 libconfig-dev libsqlite3-dev autoconf xsltproc libbsd-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential automake pkg-config libtool sqlite3 libconfig-dev libsqlite3-dev autoconf xsltproc libbsd-dev libmysqlclient-dev
 
 COPY . /repo
 WORKDIR /repo
 RUN autoreconf -fi
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libmysqlclient-dev
-RUN ./configure --enable-sqlite3 --enable-mysql
+RUN ./configure --enable-sqlite3 --enable-mysql --prefix=/install
 RUN make -j8
 RUN make install
 RUN make postinstall
 RUN /repo/src/cvechecker -i
 
-RUN mkdir -p /deps
-RUN ldd /repo/src/cvechecker | tr -s '[:blank:]' '\n' | grep '^/' | xargs -I % sh -c 'cp % /deps;'
-
 FROM ubuntu:22.04 as package
-
-COPY --from=builder /deps /deps
-COPY --from=builder /repo/src/cvechecker /repo/src/cvechecker
-COPY --from=builder /usr/local/etc /usr/local/etc
-COPY --from=builder /usr/local/var /usr/local/var
-ENV LD_LIBRARY_PATH=/deps
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libconfig-dev libsqlite3-dev libbsd-dev libmysqlclient-dev
+COPY --from=builder /install /install
